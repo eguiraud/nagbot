@@ -2,6 +2,8 @@ from telegram import ParseMode
 from telegram.ext import Updater, CommandHandler
 import logging
 import scrape_lercio
+import signal
+import sys
 
 def setup_logging():
     lvl = logging.INFO # or DEBUG
@@ -10,6 +12,12 @@ def setup_logging():
 
 def log(*args, **kwargs):
     logging.getLogger('nagbot').info(*args, **kwargs)
+
+def stop_bot_at_sigint(updater):
+    def stop_bot(sig, frame):
+        log(f'SIGINT received, stopping bot (might take a while)')
+        updater.stop()
+    signal.signal(signal.SIGINT, stop_bot)
 
 def nag(bot, job):
     bot.send_message(job.context, 'WEEEEEEEEE!')
@@ -38,9 +46,12 @@ def send_lercio_link(bot, update):
 def start_bot():
     # the updater is responsible for the background handling of telegram events
     u = Updater(token='PUT_YOUR_TOKEN_HERE')
+
     u.dispatcher.add_handler(CommandHandler('nag', start_nagging, pass_job_queue=True))
     u.dispatcher.add_handler(CommandHandler('stop', stop_nagging, pass_job_queue=True))
     u.dispatcher.add_handler(CommandHandler('lercio', send_lercio_link))
+
+    stop_bot_at_sigint(u)
     u.start_polling()
 
 if __name__ == '__main__':
