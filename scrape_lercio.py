@@ -1,19 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
 
-def article_tag(tag):
-    """
-    Filter tags that contain lercio articles.
-    All link tags with a title are considered articles.
-    """
-    return tag.name == 'a' and tag.has_attr('title')
-
-def get_main_article():
+def lercio_soup():
     p = requests.get('http://www.lercio.it')
     if p.status_code != 200:
         raise RuntimeError('could not download lercio\'s frontpage')
-    soup = BeautifulSoup(p.content, 'lxml')
-    return soup.html.body.find(article_tag)
+    return BeautifulSoup(p.content, 'lxml').html.body
+
+def get_main_article():
+    # ...assuming the main article is the first link with a title on the page
+    return lercio_soup().find('a', title=True)
 
 def get_main_title():
     main_article = get_main_article()
