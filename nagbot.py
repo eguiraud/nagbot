@@ -1,5 +1,7 @@
+from telegram import ParseMode
 from telegram.ext import Updater, CommandHandler
 import logging
+import scrape_lercio
 
 def setup_logging():
     lvl = logging.INFO # or DEBUG
@@ -25,11 +27,20 @@ def stop_nagging(bot, update, job_queue):
     if nag_jobs:
         nag_jobs[0].schedule_removal()
 
+def send_lercio_link(bot, update):
+    chat_id = update.message.chat.id
+    log(f'sending lercio article to chat {chat_id}')
+    article = scrape_lercio.get_main_article()
+    link = article['href']
+    title = article['title']
+    bot.send_message(chat_id, f'[{title}]({link})', parse_mode=ParseMode.MARKDOWN)
+
 def start_bot():
     # the updater is responsible for the background handling of telegram events
     u = Updater(token='PUT_YOUR_TOKEN_HERE')
     u.dispatcher.add_handler(CommandHandler('nag', start_nagging, pass_job_queue=True))
     u.dispatcher.add_handler(CommandHandler('stop', stop_nagging, pass_job_queue=True))
+    u.dispatcher.add_handler(CommandHandler('lercio', send_lercio_link))
     u.start_polling()
 
 if __name__ == '__main__':
