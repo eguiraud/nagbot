@@ -33,19 +33,19 @@ def carcassonne_road():
 
 
 
-text_generators = {
+links = {
     'lercio': lercio_main,
     'latest': lercio_latest,
 }
 
-def random_text():
-    text_generator = random.choice(list(text_generators.values()))
+def random_link():
+    text_generator = random.choice(list(links.values()))
     return text_generator()
 
-image_generators = {
+images = {
     'road': carcassonne_road
 }
 
 def random_image():
-    img_generator = random.choice(list(image_generators.values()))
+    img_generator = random.choice(list(images.values()))
     return img_generator()

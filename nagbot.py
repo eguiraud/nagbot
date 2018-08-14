@@ -1,5 +1,5 @@
 import log
-import scrapers
+import generators as gtors
 
 from random import random
 from datetime import datetime, timedelta
@@ -28,9 +28,9 @@ def add_image_sender_cmd(updater, name, img_url_generator):
 def nag_job(bot, job):
     should_send_text = random() < 1.
     if should_send_text:
-        bot.send_message(job.context, scrapers.random_text(), parse_mode=ParseMode.MARKDOWN)
+        bot.send_message(job.context, gtors.random_link(), parse_mode=ParseMode.MARKDOWN)
     else:
-        bot.send_photo(job.context, scrapers.random_image())
+        bot.send_photo(job.context, gtors.random_image())
 
 def start_nagging(bot, update, job_queue):
     chat_id = get_chat_id(update)
@@ -51,9 +51,8 @@ def print_help(bot, update):
     log.log(f'printing help in chat {chat_id}')
     msg = '/nag - start annoying this chat once a day\n'
     msg += '/stop - stop annoying this chat\n'
-    text_gens, img_gens = scrapers.text_generators.items(), scrapers.image_generators.items()
-    for name, fun in it.chain(text_gens, img_gens):
-        msg += f'/{name} - {fun.__doc__.strip()}\n'
+    for name, gtor in it.chain(gtors.links.items(), gtors.images.items()):
+        msg += f'/{name} - {gtor.__doc__.strip()}\n'
     bot.send_message(chat_id, msg)
 
 def stop_bot_at_sigint(updater):
@@ -70,10 +69,10 @@ def start_bot():
     u.dispatcher.add_handler(CommandHandler('nag', start_nagging, pass_job_queue=True))
     u.dispatcher.add_handler(CommandHandler('stop', stop_nagging, pass_job_queue=True))
     u.dispatcher.add_handler(CommandHandler('help', print_help))
-    for name, fun in scrapers.text_generators.items():
-        add_text_sender_cmd(u, name, fun)
-    for name, fun in scrapers.image_generators.items():
-        add_image_sender_cmd(u, name, fun)
+    for name, gtor in gtors.links.items():
+        add_text_sender_cmd(u, name, gtor)
+    for name, gtor in gtors.images.items():
+        add_image_sender_cmd(u, name, gtor)
 
     # start polling, stop on SIGINT
     stop_bot_at_sigint(u)
