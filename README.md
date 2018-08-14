@@ -16,3 +16,7 @@ Bot tokens are managed by [@BotFather](https://telegram.me/BotFather).
 ### Starting the bot
 
 Within the `nagbot` conda environment (or any other environment that satisfies `nagbot`'s package dependencies) simply start the bot with `python nagbot.py`. It only requires a working internet connection to function correctly.
+
+### Stopping the bot
+
+The graceful way to stop the bot is sending a SIGINT signal to the process, e.g. with a `CTRL+C` from the command line or with `kill`, `htop`.
