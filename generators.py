@@ -19,10 +19,10 @@ def carcassonne_road():
     """
     return 'https://i.stack.imgur.com/YQHH2.png'
 
-def lercio_soup():
-    p = requests.get('http://www.lercio.it')
+def get_page_body(url):
+    p = requests.get(url)
     if p.status_code != 200:
-        raise RuntimeError('could not download lercio\'s frontpage')
+        raise RuntimeError(f'could not download page at url "{url}"')
     return BeautifulSoup(p.content, 'lxml').html.body
 
 def lercio_latest():
@@ -30,7 +30,8 @@ def lercio_latest():
     get the latest news from lercio
     """
     is_ultimora = lambda tag: tag.name == 'span' and tag.get_text(strip=True) == 'ULTIMORA'
-    latest_articles = lercio_soup().find(is_ultimora).parent.find_all('a')
+    lercio_soup = get_page_body('http://www.lercio.it')
+    latest_articles = lercio_soup.find(is_ultimora).parent.find_all('a')
     article = random.choice(latest_articles)
     return '[{title}]({link})'.format(title=article.get_text(), link=article['href'])
 
