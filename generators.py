@@ -2,19 +2,17 @@ from bs4 import BeautifulSoup
 import random
 import requests
 
+def carcassonne_road():
+    """
+    get an image of a carcassonne road tile
+    """
+    return 'https://i.stack.imgur.com/YQHH2.png'
+
 def lercio_soup():
     p = requests.get('http://www.lercio.it')
     if p.status_code != 200:
         raise RuntimeError('could not download lercio\'s frontpage')
     return BeautifulSoup(p.content, 'lxml').html.body
-
-def lercio_main():
-    """
-    get the main article of today's lercio
-    """
-    # assuming the main article is the first link with a title on the page
-    article = lercio_soup().find('a', title=True)
-    return '[{title}]({link})'.format(title=article['title'], link=article['href'])
 
 def lercio_latest():
     """
@@ -25,11 +23,13 @@ def lercio_latest():
     article = random.choice(latest_articles)
     return '[{title}]({link})'.format(title=article.get_text(), link=article['href'])
 
-def carcassonne_road():
+def lercio_main():
     """
-    get an image of a carcassonne road tile
+    get the main article of today's lercio
     """
-    return 'https://i.stack.imgur.com/YQHH2.png'
+    # assuming the main article is the first link with a title on the page
+    article = lercio_soup().find('a', title=True)
+    return '[{title}]({link})'.format(title=article['title'], link=article['href'])
 
 
 
