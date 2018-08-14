@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import random
+import re
 import requests
 
 def absurdityisnothing():
@@ -20,10 +21,32 @@ def carcassonne_road():
     return 'https://i.stack.imgur.com/YQHH2.png'
 
 def get_page_body(url):
-    p = requests.get(url)
-    if p.status_code != 200:
+    r = requests.get(url, headers={'User-agent': 'telegram-nagbot-12831023'})
+    if r.status_code != 200:
         raise RuntimeError(f'could not download page at url "{url}"')
-    return BeautifulSoup(p.content, 'lxml').html.body
+    return BeautifulSoup(r.content, 'lxml').html.body
+
+def hmmm():
+    """
+    get a post from r/hmmm
+    """
+    soup = get_page_body('https://old.reddit.com/r/hmmm')
+    post_links = soup.find_all('a', href=re.compile('^/r/hmmm/comments'))
+    rnd_post = random.choice(post_links)
+    title = rnd_post.text.strip() or 'link'
+    link = 'https://www.reddit.com' + rnd_post['href']
+    return f'[{title}]({link})'
+
+def itemshop():
+    """
+    get a post from r/ItemShop
+    """
+    soup = get_page_body('https://old.reddit.com/r/ItemShop')
+    post_links = soup.find_all('a', href=re.compile('^/r/ItemShop/comments'))
+    rnd_post = random.choice(post_links)
+    title = rnd_post.text.strip() or 'link'
+    link = 'https://www.reddit.com' + rnd_post['href']
+    return f'[{title}]({link})'
 
 def lercio_latest():
     """
@@ -64,6 +87,8 @@ links = {
     'lercio': lercio_main,
     'latest': lercio_latest,
     'mimic': tanadelmimic,
+    'itemshop': itemshop,
+    'hmmm': hmmm,
 }
 
 def random_link():
