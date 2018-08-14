@@ -8,6 +8,7 @@ def get_commands():
         CommandHandler('nag', cmd.start_nagging, pass_job_queue=True),
         CommandHandler('stop', cmd.stop_nagging, pass_job_queue=True),
         CommandHandler('lercio', cmd.send_lercio_link),
+        CommandHandler('latest', cmd.send_lercio_latest),
     ]
 
 def stop_bot_at_sigint(updater):

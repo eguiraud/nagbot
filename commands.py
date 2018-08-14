@@ -25,3 +25,11 @@ def send_lercio_link(bot, update):
     link = article['href']
     title = article['title']
     bot.send_message(chat_id, f'[{title}]({link})', parse_mode=ParseMode.MARKDOWN)
+
+def send_lercio_latest(bot, update):
+    chat_id = update.message.chat.id
+    log(f'sending latest lercio article to chat {chat_id}')
+    article = scrape_lercio.get_latest_article()
+    link = article['href']
+    title = article.get_text()
+    bot.send_message(chat_id, f'[{title}]({link})', parse_mode=ParseMode.MARKDOWN)
