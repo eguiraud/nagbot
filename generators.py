@@ -2,6 +2,17 @@ from bs4 import BeautifulSoup
 import random
 import requests
 
+def absurdityisnothing():
+    """
+    get a random article from absurdityisnothing.net
+    """
+    p = requests.get('http://www.absurdityisnothing.net/random')
+    if p.status_code != 200:
+        raise RuntimeError(f'could not access absurdityisnothing.net')
+    absurd_soup = BeautifulSoup(p.content, 'lxml').html.body
+    title = absurd_soup.find('h1','entry-title').text
+    return '[{title}]({link})'.format(title=title, link=p.url)
+
 def carcassonne_road():
     """
     get an image of a carcassonne road tile
@@ -28,12 +39,14 @@ def lercio_main():
     get the main article of today's lercio
     """
     # assuming the main article is the first link with a title on the page
-    article = lercio_soup().find('a', title=True)
+    lercio_soup = get_page_body('http://www.lercio.it')
+    article = lercio_soup.find('a', title=True)
     return '[{title}]({link})'.format(title=article['title'], link=article['href'])
 
 
 
 links = {
+    'absurd': absurdityisnothing,
     'lercio': lercio_main,
     'latest': lercio_latest,
 }
