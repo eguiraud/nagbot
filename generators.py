@@ -5,7 +5,7 @@ import requests
 
 def absurdityisnothing():
     """
-    get a random article from absurdityisnothing.net
+    a random article from absurdityisnothing.net
     """
     p = requests.get('http://www.absurdityisnothing.net/random')
     if p.status_code != 200:
@@ -16,7 +16,7 @@ def absurdityisnothing():
 
 def carcassonne_road():
     """
-    get an image of a carcassonne road tile
+    an image of a carcassonne road tile
     """
     return 'https://i.stack.imgur.com/YQHH2.png'
 
@@ -28,7 +28,7 @@ def get_page_body(url):
 
 def hmmm():
     """
-    get a post from r/hmmm
+    a post from r/hmmm
     """
     soup = get_page_body('https://old.reddit.com/r/hmmm')
     post_links = soup.find_all('a', href=re.compile('^/r/hmmm/comments'))
@@ -39,7 +39,7 @@ def hmmm():
 
 def itemshop():
     """
-    get a post from r/ItemShop
+    a post from r/ItemShop
     """
     soup = get_page_body('https://old.reddit.com/r/ItemShop')
     post_links = soup.find_all('a', href=re.compile('^/r/ItemShop/comments'))
@@ -50,7 +50,7 @@ def itemshop():
 
 def lercio_latest():
     """
-    get the latest news from lercio
+    the latest news from lercio
     """
     is_ultimora = lambda tag: tag.name == 'span' and tag.get_text(strip=True) == 'ULTIMORA'
     lercio_soup = get_page_body('http://www.lercio.it')
@@ -60,7 +60,7 @@ def lercio_latest():
 
 def lercio_main():
     """
-    get the main article of today's lercio
+    the main article of today's lercio
     """
     # assuming the main article is the first link with a title on the page
     lercio_soup = get_page_body('http://www.lercio.it')
@@ -69,7 +69,7 @@ def lercio_main():
 
 def tanadelmimic():
     """
-    get a random page from tanadelmimic.it
+    a random page from tanadelmimic.it
     """
     r = requests.get('http://tanadelmimic.it/wiki/Speciale:PaginaCasuale')
     if r.status_code != 200:
