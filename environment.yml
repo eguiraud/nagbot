@@ -1,0 +1,12 @@
+name: nagbot
+channels:
+   - defaults
+dependencies:
+   - python=3
+   - numpy
+   - cython
+   - requests
+   - lxml
+   - pip:
+      - python-telegram-bot
+      - bs4
