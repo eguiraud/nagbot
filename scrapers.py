@@ -25,6 +25,14 @@ def lercio_latest():
     article = random.choice(latest_articles)
     return '[{title}]({link})'.format(title=article.get_text(), link=article['href'])
 
+def carcassonne_road():
+    """
+    get an image of a carcassonne road tile
+    """
+    return 'https://i.stack.imgur.com/YQHH2.png'
+
+
+
 text_generators = {
     'lercio': lercio_main,
     'latest': lercio_latest,
@@ -35,6 +43,7 @@ def random_text():
     return text_generator()
 
 image_generators = {
+    'road': carcassonne_road
 }
 
 def random_image():
