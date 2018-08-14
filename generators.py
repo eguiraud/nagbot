@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import random
 import re
 import requests
+import urllib
 
 def absurdityisnothing():
     """
@@ -75,6 +76,7 @@ def tanadelmimic():
     if r.status_code != 200:
         raise RuntimeError(f'could not access tanadelmimic.it')
     title = r.url.split('/')[-1].replace('_', ' ')
+    title = urllib.parse.unquote(title)
     text = '[{title}]({link})'.format(title=title, link=r.url)
     first_paragraph = BeautifulSoup(r.content, 'lxml').html.body.find('p')
     if first_paragraph:
