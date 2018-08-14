@@ -49,7 +49,8 @@ def stop_nagging(bot, update, job_queue):
 def print_help(bot, update):
     chat_id = get_chat_id(update)
     log.log(f'printing help in chat {chat_id}')
-    msg = '/nag - start annoying this chat once a day\n'
+    msg = '/help - print this help message\n'
+    msg += '/nag - start annoying this chat once a day\n'
     msg += '/stop - stop annoying this chat\n'
     for name, gtor in it.chain(gtors.links.items(), gtors.images.items()):
         msg += f'/{name} - {gtor.__doc__.strip()}\n'
