@@ -44,12 +44,26 @@ def lercio_main():
     article = lercio_soup.find('a', title=True)
     return '[{title}]({link})'.format(title=article['title'], link=article['href'])
 
+def tanadelmimic():
+    """
+    get a random page from tanadelmimic.it
+    """
+    r = requests.get('http://tanadelmimic.it/wiki/Speciale:PaginaCasuale')
+    if r.status_code != 200:
+        raise RuntimeError(f'could not access tanadelmimic.it')
+    title = r.url.split('/')[-1].replace('_', ' ')
+    text = '[{title}]({link})'.format(title=title, link=r.url)
+    first_paragraph = BeautifulSoup(r.content, 'lxml').html.body.find('p')
+    if first_paragraph:
+        text += '\n' + first_paragraph.text.strip()
+    return text
 
 
 links = {
     'absurd': absurdityisnothing,
     'lercio': lercio_main,
     'latest': lercio_latest,
+    'mimic': tanadelmimic,
 }
 
 def random_link():
