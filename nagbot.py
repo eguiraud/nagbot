@@ -26,7 +26,7 @@ def add_image_sender_cmd(updater, name, img_url_generator):
     updater.dispatcher.add_handler(CommandHandler(name, callback))
 
 def nag_job(bot, job):
-    should_send_text = random() < 1.
+    should_send_text = random() < .9
     if should_send_text:
         bot.send_message(job.context, gtors.random_link(), parse_mode=ParseMode.MARKDOWN)
     else:
